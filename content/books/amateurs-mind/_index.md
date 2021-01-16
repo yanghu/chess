@@ -1,3 +1,0 @@
----
-title: "Amateur's Mind"
----
