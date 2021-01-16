@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "http://yanghu.github.io/chess/"
 languageCode = "en-us"
 title = "Chess Study"
 theme = "uBlogger"

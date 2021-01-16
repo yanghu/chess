@@ -24,7 +24,7 @@ figcaption {
 /* To handle embedded lichess iframes*/
 iframe[src*="lichess"] {
 	border: none;
-	max-width: 90%;
+	max-width: 100%;
 	width: 800px;
 	height: 495px;
 }
