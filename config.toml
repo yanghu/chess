@@ -1,4 +1,5 @@
-baseURL = "http://yanghu.github.io/chess/"
+# baseURL to the ROOT.(e.g., host + port) Should not include the path.
+baseURL = "http://yanghu.github.io/"
 languageCode = "en-us"
 title = "Chess Study"
 theme = "uBlogger"
