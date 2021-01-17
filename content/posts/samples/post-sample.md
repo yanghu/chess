@@ -11,10 +11,14 @@ toc:
 ---
 
 
-**Hugo** provides multiple built-in shortcodes for author convenience and to keep your markdown content clean.
+**Hugo** shortcodes allows injecting pre-defined HTML templates into the content convenietly. For example, the following Lichess board is injected with the simple code:
+
+```
+{{</* lichess-embed src="https://lichess.org/study/6WdxsaB5/CRZKnsXE" */>}}
+```
 
 
-{{< lichess-embed src="https://lichess.org/study/k4CE3PmD/lOVZbzNu" >}}
+{{< lichess-embed src="https://lichess.org/study/6WdxsaB5/CRZKnsXE" >}}
 
 
 Hugo uses Markdown for its simple content format. However, there are a lot of things that Markdown doesn’t support well. You could use pure HTML to expand possibilities.
@@ -24,7 +28,13 @@ But this happens to be a bad idea. Everyone uses Markdown because it’s pure an
 To avoid this limitations, Hugo created [shortcodes](https://gohugo.io/extras/shortcodes/).
 A shortcode is a simple snippet that can generate reasonable HTML code and conforms to Markdown's design philosophy.
 
-{{< fen-diag fen="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" flip="true">}}
+Example of using short code to generate chessboard:
+
+```
+{{</* fen-diag fen="8/8/8/2k5/8/4K3/3R1P1r/8 b - - 1 11" flip="true" */>}}
+```
+
+{{< fen-diag fen="8/8/8/2k5/8/4K3/3R1P1r/8 b - - 1 11" flip="true">}}
 
 
 Hugo ships with a set of predefined shortcodes that represent very common usage. These shortcodes are provided for author convenience and to keep your markdown content clean.

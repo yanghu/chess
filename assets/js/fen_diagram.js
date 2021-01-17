@@ -34,8 +34,9 @@ fen_diagram = (function(){
     // Array.from(list) is for Microsoft Edge compatibility
     let diagDivs = Array.from(document.getElementsByClassName(containerClass));
     let baseurl = diagDivs[0].dataset.baseurl
+    let loadImages = loadImagesFunc(baseurl)
     if (diagDivs.length > 0) {
-        window.onload = loadImagesFunc(baseurl);
+        window.onload = loadImages;
     }
     
     // CONFIG: main() is called back when images are loaded.
