@@ -1,6 +1,6 @@
 ---
 title: "Post Sample"
-date: 2021-01-16T22:17:41-08:00
+date: 2021-01-16T12:17:41-08:00
 draft: false
 categories: ["example"]
 tags: []
