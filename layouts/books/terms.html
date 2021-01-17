@@ -17,7 +17,7 @@
                 <div class="categories-card">
                 {{- range $terms -}}
                     {{- $term := .Term -}}
-                    {{- $pages := .Pages -}}
+                    {{- $pages := .Pages.ByWeight -}}
                     {{- with $.Site.GetPage "taxonomy" (printf "%v/%v" $type $term) -}}
                     <div class="card-item">
                         <div class="card-item-wrapper">
@@ -31,7 +31,7 @@
                             {{- range first 5 $pages -}}
                                 <article class="archive-item">
                                     <a href="{{ .RelPermalink }}" class="archive-item-link">
-                                        {{- .Title -}}
+                                        {{- .Params.Title -}}
                                     </a>
                                 </article>
                             {{- end -}}

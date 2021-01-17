@@ -1,4 +1,5 @@
 ---
+weight: 1
 title: "1. First Principles: Endings, Middle-game and Openings"
 date: 2021-01-16T16:16:44-08:00
 draft: false

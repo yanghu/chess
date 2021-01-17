@@ -1,4 +1,5 @@
 ---
+weight: 4
 title: "4. General Theory"
 date: 2021-01-16T22:12:23-08:00
 draft: false
