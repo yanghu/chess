@@ -1,6 +1,6 @@
 fen_diagram = (function(){
     // CONFIG: Piece image directory path and filenames.
-    const imgPath = "/../images/pieces/";
+    const imgPath = "images/pieces/";
     let pieceSrcs = {"P" : "wP.svg", "N" : "wN.svg", "B" : "wB.svg",
                      "R" : "wR.svg", "Q" : "wQ.svg", "K" : "wK.svg",
                      "p" : "bP.svg", "n" : "bN.svg", "b" : "bB.svg",
@@ -33,8 +33,9 @@ fen_diagram = (function(){
     //=== Run the script only if there are diagrams to draw ===
     // Array.from(list) is for Microsoft Edge compatibility
     let diagDivs = Array.from(document.getElementsByClassName(containerClass));
+    let baseurl = diagDivs[0].dataset.baseurl
     if (diagDivs.length > 0) {
-        window.onload = loadImages;
+        window.onload = loadImagesFunc(baseurl);
     }
     
     // CONFIG: main() is called back when images are loaded.
@@ -55,7 +56,8 @@ fen_diagram = (function(){
 
     // =========== Class and function definitions ==============
 
-    function loadImages() {
+    function loadImagesFunc(baseurl){
+    return function () {
         /** Loads images used to draw chess position.
         Calls back main() function when all images are successfully loaded.
         **/
@@ -65,7 +67,7 @@ fen_diagram = (function(){
         for (let key of pieceChars) {
             pieceImgs[key].onload = onloadCallback;
             pieceImgs[key].onerror = onerrorCallback;
-            pieceImgs[key].src = pieceSrcs[key];
+            pieceImgs[key].src = baseurl+pieceSrcs[key];
         }
         function onloadCallback() {
             numImgsLoaded++;
@@ -83,6 +85,7 @@ fen_diagram = (function(){
             return;
         }
         return;
+    }
     }
     
 
