@@ -2,7 +2,7 @@
 weight: 1
 title: "Imbalances"
 date: 2021-01-15T22:17:41-08:00
-draft: true
+draft: false
 categories: ["bookstudy"]
 tags: ["positional", "imbalance"]
 description: "This is about imbalance"
@@ -92,3 +92,50 @@ Sometimes, that means act immediately, even sacrificing on other parts.
 {{< /admonition >}}
 
 {{< lichess-embed src="https://lichess.org/study/hqu5fUxj/kLHQG9H0#82" >}}
+
+
+#### The game between C players
+
+This game has lots of doubious moves, but is a good lesson on imbalance, and how not to play.
+
+{{< lichess-embed src="https://lichess.org/study/hqu5fUxj/h1pRsiQk#0" >}}
+
+#### Choice: Close position or take away Knight's square
+
+No rule is correct all the time. For example, in a BvN game, a move that takes away Knight's square may also
+close the position. What do you do?
+
+[Chess.com lesson](https://www.chess.com/fi/lessons/silmans-lessons-in-strategy-1/longren-silman-santa-barbara-1989)
+
+Correct play is NOT to kick the Knight: it **closes the position** and dimnishes the Bishops. Black should
+open us the position instead, by f7-f6 to support e6-e5.
+
+* [The game with annotation](https://lichess.org/study/JNArtdz2/548VaegM#1): We can see that, once the 
+position is open, White's Knight becomes a weak point, requiring defending, while Black's Bishops+Rooks are 
+all activated.
+
+[Same position, Silman v 1700, with incorrect play(kicking the Knight)](https://lichess.org/study/JNArtdz2/1muCqfxz#1): The 1700 student is too obsessed with checkmate threats, instead of trying to slowly improve the
+position.
+
+{{< admonition type=note title="Take away from 1700 game" open=true >}}
+* Always assume your opponent will play the best response.
+* If you have pair of bishops, opening up the position is more important than kicking the Knight.
+{{< /admonition >}}
+
+#### Limiting the Knight when you have a Bishop pair
+
+In the Hort's game, white has pair of bishop. Black's Knight has no chance on the Queenside, and white 
+follows up with g5 and g4 to lock the King side.
+
+{{< fen-diag fen="4n3/1b3k1p/p2p2p1/3Pp3/2P3P1/6PP/2BB4/6K1 w - - 0 1" flip="" caption="Limiting the Knight" >}}
+
+#### Which piece to keep?
+
+In this position, black has 3 choices:
+* {{< mainline >}} 1... Rc5 {{< /mainline >}} for a R+N v R+B endgame
+* {{< mainline >}} 1... Nxe4 {{< /mainline >}} for a pure Rook endgame
+* {{< mainline >}} 1... Rd4 {{< /mainline >}} for a Knight vs Bishop endgame
+
+{{< admonition type=note title="Bishop are better in pawn race endings" open=false >}}{{< /admonition >}}
+
+{{< lichess-embed src="https://lichess.org/study/noJstzHr/5CMM9w4V#1" >}}
