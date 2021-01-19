@@ -89,4 +89,17 @@ the pieces and only leave pawns, black would be perfectly fine.
 
 ## Games
 
-### 
+### 1700-Silman: passive White play not utilizing center/space.
+
+In this game, white(1700) has better space, but he was playing too passive, reacting to imaginary one-move
+threats with no plan on his own. 
+
+{{< admonition type=note title="Tips from the game" open=true >}}
+* Passive planless play leads to loss.
+* Play on the center > wings.
+* Know what the opponent is planning, but don't allow yourself become mesmerized by his ideas. 
+Your plans should prove stronger than theirs.
+* Don't make pointless one-move attacks!!! **Always** expect your opponent to see your threats.
+{{< /admonition >}}
+
+{{< lichess-embed src="https://lichess.org/study/noJstzHr/UVLIw0ZS#16" >}}
