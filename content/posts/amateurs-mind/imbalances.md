@@ -1,6 +1,6 @@
 ---
 weight: 1
-title: "Imbalances"
+title: "Imbalances and Bishop vs Knight"
 date: 2021-01-15T22:17:41-08:00
 draft: false
 categories: ["bookstudy"]
