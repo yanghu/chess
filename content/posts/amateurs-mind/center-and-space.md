@@ -89,9 +89,9 @@ the pieces and only leave pawns, black would be perfectly fine.
 
 ## Games
 
-### 1700-Silman: passive White play not utilizing center/space.
+### 1750-Silman: passive White play not utilizing center/space.
 
-In this game, white(1700) has better space, but he was playing too passive, reacting to imaginary one-move
+In this game, white(1750) has better space, but he was playing too passive, reacting to imaginary one-move
 threats with no plan on his own. 
 
 {{< admonition type=note title="Tips from the game" open=true >}}
@@ -103,3 +103,58 @@ Your plans should prove stronger than theirs.
 {{< /admonition >}}
 
 {{< lichess-embed src="https://lichess.org/study/noJstzHr/UVLIw0ZS#16" >}}
+
+### 2000-Silman: Modern defense: bad pawn push
+
+In this game, White has a strong center, but played aimless and careless, opening up the position while giving
+Black the bishop pair, costing him the game.
+
+{{< admonition type=note title="Tips" open=true >}}
+* Have a plan before your development, so you know where to best put your pieces.
+* Carefully analyze the position, instead of checking random moves.
+{{< /admonition >}}
+
+{{< lichess-embed src="https://lichess.org/study/noJstzHr/8Fr4rsW6#10" >}}
+
+### 1600-Silman: Modern defense 2.
+
+{{< admonition type=note title="Tips" open=true >}}
+* Don't think moving (pawns) forward is good. It weakens squares.
+* Games are often won by taking space and restricting opponent. You don't need to attack like crazy to win.
+* The side with space advantage should avoid trading, while side with less space should seek exchanges.
+{{< /admonition >}}
+
+### Fischer-Gheorghiu, 1970
+
+White takes control of the center, limiting Black's pieces with no good forward moves, slowly improving 
+position of his own pieces and eventually won.
+
+{{< lichess-embed src="https://lichess.org/study/noJstzHr/p8fZFTRa#10" >}}
+
+### Reti-Carls: King-side space.
+
+Reti won the position by: avoiding unnecessary exchanges, then making use of h-file and open whenever he 
+wants.
+
+Due to the space advantage, White can double/triple Rook/Queen on h-file, while black can't do the same. Once 
+white has enough pressure, he opens the h-file and breaks through. This example shows how to use space 
+advantage.
+
+{{< lichess-embed src="https://lichess.org/study/noJstzHr/dgzVtUGF#0" >}}
+
+#### 1700-Silman: White wrongly closes the h-file and lose.
+
+In the same position, the student closes the h-file on the first move. (engine evaluation jumped from +2.x
+ points to 0).
+
+ {{< admonition type=note title="Space advantage means nothing if position is **closed**" open=true >}}{{< /admonition >}}
+
+### Silman-Barkan, 1981: how White gains space everywhere.
+
+In this example, White already has space advantage on Queenside. However, he sees the chance to gain space on
+center and King side, and did so by some excellent moves. Once he has the space advantage everywhere, he can 
+improve his pieces, move then to strike hard with greater mobility.
+
+* 1500-Silman: He *failed to stop Black's counterplay at center*, allowed black to gain space on King 
+side and storm there, allowing the game becomes a race.
+* 1650-Silman: Identified white should stop Black's plan to break at center.
