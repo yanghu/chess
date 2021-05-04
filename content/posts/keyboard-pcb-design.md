@@ -1,16 +1,207 @@
 ---
 title: "Keyboard Pcb Design"
 date: 2021-04-11T18:37:25-07:00
-draft: true
+draft: false
 ---
 
-# Main Parts and Choices
+# Feature highlights
 
-The keyboard circuit has the following essential parts:
-* Voltage regulator: converts USB 5v to 3.3v used by MCUs
-* MCU: The process that controls the whole board.
-* IO Expander: to scan switches on secondary side and communicate with the main
-side via SPI.
+Initially, I wanted to build a split board. However, since I already have a
+split (crkbd), making a Arteus/Reviuge-like board makes more sense. 
+
+The design is using aggressive stagger (same column stagger like my split
+design), and 15 degree angle of columns. 
+
+Other features:
+
+* OLED status display
+* RGB underglow
+* Audio
+* Encoder
+
+# Design considerations for STM32
+
+## DMA channels for peripherals
+
+Peripherals like I2C, SPI and ADC, DAC would use DMA channels. STM32F072 has
+7 DMA channels(details can be found in reference doc). PWM(timers) can also use
+DMA, for example, the WS2812 LED PWM driver uses DMA. When choosing 
+peripherals, we need to choose carefully so that DMA channels won't collide.
+
+- I2C1: uses DMA channels 6/7(or 2/3). (Requires [magic boot code](#oled) 
+to configure.)
+- DAC1/2: uses DMA channels 3 and 4.
+- SPI1: channels 2/3.
+- SPI2: channels 4/5 or 6/7.
+
+QMK uses DMA for the following:
+- WS2812 LED: pwm driver uses DMA+PWM.
+- Audio: DAC driver uses DMA. PWM driver doesn't use DMA.
+- OLED: Uses I2C which uses DMA channels.
+
+Summary of DMA usage in my design:
+
+| Feature  |  QMK Driver | Pins  |  Peripheral |  DMA channels|
+|----------|-------------|-------|-------------|--------------|
+| OLED     |   I2C       |PB6/7  |  I2C1       |  6/7         |
+| RGB LED  |  PWM        | PA8   | TIM1_CH1    |  2           |
+| Audio    |  PWM        | PA1   | TIM2_CH2    |  N/A         |
+
+## Audio Driver
+
+Two options: DAC and PWM. DAC would occupy one or two DMA channels. PWM doesn't
+use DMA. 
+
+### Audio with DAC
+
+Using two pins can provides higher voltage amplitude and louder volume. 
+
+* Pins(A4/A5). [ref](https://docs.qmk.fm/#/audio_driver?id=arm),
+[ref2](https://docs.qmk.fm/#/feature_audio?id=arm-based-boards)
+```
+// Audio configuration
+#define AUDIO_PIN A4
+#define AUDIO_PIN_ALT A5
+#define AUDIO_PIN_ALT_AS_NEGATIVE
+#define A4_AUDIO
+#ifndef STARTUP_SONG
+#    define STARTUP_SONG SONG(STARTUP_SOUND)
+#endif  // STARTUP_SONG
+```
+
+### Audio with PWM
+
+* Use any timer's PWM to output square wave. This only support single pin mode.
+
+We use `TIM2_CH2` as example. (use tim3 for audio state timer)
+
+```
+//halconf.h:
+#define HAL_USE_PWM                 TRUE
+#define HAL_USE_PAL                 TRUE
+#define HAL_USE_GPT                 TRUE
+#include_next <halconf.h>
+
+// mcuconf.h:
+#include_next <mcuconf.h>
+#undef STM32_PWM_USE_TIM2
+#define STM32_PWM_USE_TIM2                  TRUE
+#undef STM32_GPT_USE_TIM3
+#define STM32_GPT_USE_TIM3                  TRUE
+
+//config.h:
+#define AUDIO_PIN A1
+// AF2 on pin PA1 is TIM2_CH2
+#define AUDIO_PWM_PAL_MODE 2
+#define AUDIO_PWM_DRIVER PWMD2
+#define AUDIO_PWM_CHANNEL 2
+#define AUDIO_STATE_TIMER GPTD3
+```
+
+## OLED
+
+I2C: Use I2C1(pins B6/7). [ref](https://docs.qmk.fm/#/i2c_driver?id=arm-configuration)
+
+### Magic fix
+
+For F072, extra configuration is needed to use I2C1 correctly. For details, see
+[discord](https://discord.com/channels/440868230475677696/440868230475677698/837318487759388682),
+[discord2](https://discord.com/channels/440868230475677696/440868230475677698/837292700051046400)
+
+### Example code
+
+```
+// example config: https://github.com/qmk/qmk_firmware/blob/master/keyboards/xelus/kangaroo/config.h
+//set I2C1_SCL_PAL_MODE and I2C1_SDA_PAL_MODE to 1. (PINs B6/7)
+
+#define I2C1_TIMINGR_SCLDEL 3U
+#define I2C1_TIMINGR_SDADEL 1U
+#define I2C1_TIMINGR_SCLH     3U
+#define I2C1_TIMINGR_SCLL   9U
+
+//Copy board_init() from https://github.com/qmk/qmk_firmware/blob/master/keyboards/xelus/kangaroo/kangaroo.c :
+
+void board_init(void) {
+  SYSCFG->CFGR1 |= SYSCFG_CFGR1_I2C1_DMA_RMP;
+  SYSCFG->CFGR1 &= ~(SYSCFG_CFGR1_SPI2_DMA_RMP);
+}
+
+//The problem is that platforms/chibios/GENERIC_STM32_F072XB/configs/mcuconf.h contains:
+#define STM32_I2C_I2C1_RX_DMA_STREAM STM32_DMA_STREAM_ID(1, 7)
+#define STM32_I2C_I2C1_TX_DMA_STREAM STM32_DMA_STREAM_ID(1, 6)
+
+//But this is actually an alternate configuration for I2C1 DMA streams, and it needs to be enabled by setting the SYSCFG_CFGR1_I2C1_DMA_RMP bit.
+
+//The SYSCFG_CFGR1_SPI2_DMA_RMP clearing part might not actually be needed (the power-on state for this bit should be 0), but you can include it just to be sure.
+
+```
+
+## Backlight RGB: 
+
+* LED: use [WS2812S](https://lcsc.com/product-detail/Light-Emitting-Diodes-LED_5050-RGBIntegrated-Light_C114584.html)
+
+### RGB driver using PWM
+Uses PWM and DMA. Here I'm using `TIM1_CH1` on pin `A8` as output, and connect
+it with pull up resistor to 5V. (`A8` is a 5v tolerant pin)
+
+```
+// rules.mk
+RGBLIGHT_DRIVER = WS2812
+// config.h 
+#define RGB_DI_PIN A8
+#define WS2812_PWM_DRIVER PWMD1
+#define WS2812_PWM_CHANNEL 1
+#define WS2812_EXTERNAL_PULLUP
+// Set A8 to TIM1_CH1
+#define WS2812_PWM_PAL_MODE 2
+// "Stream" here means the "channel x" of the dma controller in datasheet.
+// TIM1_CH1 uses dma channel 2. There's also a note in the reference:
+// DMA request mapped on this DMA channel only if the corresponding remapping 
+// bit is cleared in the SYSCFG_CFGR1 register. For more details, please refer 
+// to Section 9.1.1: SYSCFG configuration register 1 (SYSCFG_CFGR1) on page165.
+#define WS2812_DMA_STREAM STM32_DMA1_STREAM2
+// "Channel" here means the dma controller (DMA1/DMA2)
+// DMA_CHANNEL shoule be left undefined, since F072 has only one DMA controller.
+```
+
+If using pin B15(tim15)
+
+```
+// rules.mk
+RGBLIGHT_DRIVER = WS2812
+// config.h 
+#define RGB_DI_PIN B15
+#define WS2812_EXTERNAL_PULLUP
+// using TIM15 channel 2
+#define WS2812_PWM_DRIVER PWMD15
+#define WS2812_PWM_CHANNEL 2
+// Set B15 to tim15 ch2
+#define WS2812_PWM_PAL_MODE 1
+// DMA setup needs to be verified.
+#define WS2812_DMA_STREAM STM32_DMA1_STREAM5
+//mcuconf.h if using tim15
+//#define STM32_TIM15_SUPPRESS_ISR
+```
+
+### RGB driver SPI
+Use `SPI2`(B15). [ref](https://docs.qmk.fm/#/ws2812_driver?id=spi)
+ [spi](https://docs.qmk.fm/#/spi_driver?id=chibiosarm-configuration).
+  This requires other spi pins unused.(miso and sck, e.g. B13 and B14)
+
+```
+#define WS2812_SPI SPID2
+// Pins 15/14/13
+#define WS2812_SPI_MOSI_PAL_MODE 0
+#define WS2812_SPI_MOSO_PAL_MODE 0
+#define WS2812_SPI_SCK_PAL_MODE 0
+```
+
+Note: Extra setup is needed for F072 `B15` pin. [details](https://discord.com/channels/440868230475677696/440868230475677698/838685140661436417)
+
+The fix is to define `#define WS2812_SPI_USE_CIRCULAR_BUFFER`. The flag is only
+available in `develop` branch. Anoth 
+
+
 
 # Component choices
 
@@ -19,12 +210,15 @@ for SMD assembly service availability and price.
 
 Summary:
 
-| Component  |  Model   | JLCPCB PN |  Notes |
-|------------|----------|-----------|--------|
-| MCU        |STM32F072CBU6| C92504  |        |
-| Regulator  |XC6206P332MR| C5446   | 3.3V fixed output|
-| BJT        |MMBT3904    | C20526  | need add resistors|
+| Component  |  Model   | JLCPCB PN |Count|Notes | 
+|------------|----------|-----------|-----|------|
+| MCU        |STM32F072CBU6| C92504 |1   |
+| Regulator  |XC6206P332MR| C5446   | 1  | 3.3V fixed output|
+| BJT        |MMBT3904    | C20526  | 1  | for reset circuit, need add resistors|
 | diode      | 1N4148     |C81598  | for both switches and reset button.|
+| Fuse       |JK-MSMD050    | C369167 | For USB bus voltage protection|
+| Schottky Diode| SS14    | C2480  | between voltage regulartor|
+| Buzzer    | KLJ-1625    | C201041| smd pizeo buzzer |
 
 
 ## MCU
@@ -47,4 +241,20 @@ circuit, we need a transistor. I'm not using the prebiased one shown there
 charge. Instead I'm using a 40V, 200mA NPN transistor and adding external 
 resistors.
 
-## Major parts
+## Fuse 
+
+Ferris used "Polymeric 15V 1A 100ms 750mΩ 1206 PTC Resettable Fuses RoHS", 
+however the model is OOS, so I searched on LCSC and found C369167
+which has similar spec. For the diode, Ferris used C435473, and I'm using the
+same.
+
+## Schottky Diode
+
+Ferris used RB060MM-30, which is 30V vr, 490mV vf.  I use SS14 which is basic
+part in JLCPCB. It is "40V 1A 550mV @ 1A" which is pretty close.
+
+## Resistors and capacitors
+
+I'm using all 0603 footprint.
+
+
