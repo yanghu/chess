@@ -1,19 +1,41 @@
 <!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Keyboard Pcb Design |</title><meta name=Description content><meta property="og:title" content="Keyboard Pcb Design"><meta property="og:description" content="Feature highlights Initially, I wanted to build a split board. However, since I already have a split (crkbd), making a Arteus/Reviuge-like board makes more sense.
 The design is using aggressive stagger (same column stagger like my split design), and 15 degree angle of columns.
 Other features:
- OLED status display RGB underglow Audio Encoder  Design considerations for STM32 DMA channels for peripherals Peripherals like I2C, SPI and ADC, DAC would use DMA channels."><meta property="og:type" content="article"><meta property="og:url" content="http://yanghu.github.io/chess/posts/keyboard-pcb-design/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-04-11T18:37:25-07:00"><meta property="article:modified_time" content="2021-04-11T18:37:25-07:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Keyboard Pcb Design"><meta name=twitter:description content="Feature highlights Initially, I wanted to build a split board. However, since I already have a split (crkbd), making a Arteus/Reviuge-like board makes more sense.
+ OLED status display RGB underglow Audio Encoder  Design considerations for STM32 I&rsquo;ll be using F411 due to lack of F072 stock.
+Tips for setup a stm chip in qmk: https://discord."><meta property="og:type" content="article"><meta property="og:url" content="http://yanghu.github.io/chess/posts/keyboard-pcb-design/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-04-11T18:37:25-07:00"><meta property="article:modified_time" content="2021-04-11T18:37:25-07:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Keyboard Pcb Design"><meta name=twitter:description content="Feature highlights Initially, I wanted to build a split board. However, since I already have a split (crkbd), making a Arteus/Reviuge-like board makes more sense.
 The design is using aggressive stagger (same column stagger like my split design), and 15 degree angle of columns.
 Other features:
- OLED status display RGB underglow Audio Encoder  Design considerations for STM32 DMA channels for peripherals Peripherals like I2C, SPI and ADC, DAC would use DMA channels."><meta name=application-name content="Chess Study"><meta name=apple-mobile-web-app-title content="Chess Study"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://yanghu.github.io/chess/posts/keyboard-pcb-design/><link rel=prev href=http://yanghu.github.io/chess/posts/samples/post-sample/><link rel=next href=http://yanghu.github.io/chess/posts/chess-fundamentals/end-game-strategy/><link rel=stylesheet href=/chess/lib/normalize/normalize.min.css><link rel=stylesheet href=/chess/css/style.min.css><link rel=stylesheet href=/chess/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/chess/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Keyboard Pcb Design","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/yanghu.github.io\/chess\/posts\/keyboard-pcb-design\/"},"genre":"posts","wordCount":1114,"url":"http:\/\/yanghu.github.io\/chess\/posts\/keyboard-pcb-design\/","datePublished":"2021-04-11T18:37:25-07:00","dateModified":"2021-04-11T18:37:25-07:00","publisher":{"@type":"Organization","name":"xxxx","logo":"http:\/\/yanghu.github.io\/images\/avatar.png"},"author":{"@type":"Person","name":"Author"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/chess/ title="Chess Study" class=header-logo><span class=header-title-pre><i class="fas fa-chess fa-fw"></i></span>Chess Study</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/chess/posts/>Posts </a><a class=menu-item href=/chess/tags/>Tags </a><a class=menu-item href=/chess/categories/>Categories </a><a class=menu-item href=/chess/books/>Book Studies </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/chess/ title="Chess Study" class=header-logo><span class=header-title-pre><i class="fas fa-chess fa-fw"></i></span>Chess Study</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/chess/posts/ title>Posts</a><a class=menu-item href=/chess/tags/ title>Tags</a><a class=menu-item href=/chess/categories/ title>Categories</a><a class=menu-item href=/chess/books/ title>Book Studies</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><main class=main><div class="container content-article page-toc theme-classic"><div class=toc id=toc-auto><div class=toc-title>Contents</div><div class="toc-content always-active" id=toc-content-auto></div></div><div class=header-post><div class=post-title><div class=post-all-meta><div class=breadcrumbs><a href=/chess/>Home </a>/ <a href=/>Keyboard Pcb Design</a></div><h1 class="single-title animated flipInX">Keyboard Pcb Design</h1><div class=post-meta><div class=post-meta-line>&nbsp;&nbsp;&nbsp;&nbsp;<i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time class=timeago datetime=2021-04-11>2021-04-11</time>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1114 words
+ OLED status display RGB underglow Audio Encoder  Design considerations for STM32 I&rsquo;ll be using F411 due to lack of F072 stock.
+Tips for setup a stm chip in qmk: https://discord."><meta name=application-name content="Chess Study"><meta name=apple-mobile-web-app-title content="Chess Study"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://yanghu.github.io/chess/posts/keyboard-pcb-design/><link rel=prev href=http://yanghu.github.io/chess/posts/samples/post-sample/><link rel=next href=http://yanghu.github.io/chess/posts/chess-fundamentals/end-game-strategy/><link rel=stylesheet href=/chess/lib/normalize/normalize.min.css><link rel=stylesheet href=/chess/css/style.min.css><link rel=stylesheet href=/chess/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/chess/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Keyboard Pcb Design","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/yanghu.github.io\/chess\/posts\/keyboard-pcb-design\/"},"genre":"posts","wordCount":1213,"url":"http:\/\/yanghu.github.io\/chess\/posts\/keyboard-pcb-design\/","datePublished":"2021-04-11T18:37:25-07:00","dateModified":"2021-04-11T18:37:25-07:00","publisher":{"@type":"Organization","name":"xxxx","logo":"http:\/\/yanghu.github.io\/images\/avatar.png"},"author":{"@type":"Person","name":"Author"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/chess/ title="Chess Study" class=header-logo><span class=header-title-pre><i class="fas fa-chess fa-fw"></i></span>Chess Study</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/chess/posts/>Posts </a><a class=menu-item href=/chess/tags/>Tags </a><a class=menu-item href=/chess/categories/>Categories </a><a class=menu-item href=/chess/books/>Book Studies </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/chess/ title="Chess Study" class=header-logo><span class=header-title-pre><i class="fas fa-chess fa-fw"></i></span>Chess Study</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/chess/posts/ title>Posts</a><a class=menu-item href=/chess/tags/ title>Tags</a><a class=menu-item href=/chess/categories/ title>Categories</a><a class=menu-item href=/chess/books/ title>Book Studies</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><main class=main><div class="container content-article page-toc theme-classic"><div class=toc id=toc-auto><div class=toc-title>Contents</div><div class="toc-content always-active" id=toc-content-auto></div></div><div class=header-post><div class=post-title><div class=post-all-meta><div class=breadcrumbs><a href=/chess/>Home </a>/ <a href=/>Keyboard Pcb Design</a></div><h1 class="single-title animated flipInX">Keyboard Pcb Design</h1><div class=post-meta><div class=post-meta-line>&nbsp;&nbsp;&nbsp;&nbsp;<i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time class=timeago datetime=2021-04-11>2021-04-11</time>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1213 words
 &nbsp;&nbsp;&nbsp;&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;6 minutes</div></div></div></div></div><article class="single toc-start"><div class="content-block content-block-first content-block-position"><div class=post><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#dma-channels-for-peripherals>DMA channels for peripherals</a></li><li><a href=#audio-driver>Audio Driver</a><ul><li><a href=#audio-with-dac>Audio with DAC</a></li><li><a href=#audio-with-pwm>Audio with PWM</a></li></ul></li><li><a href=#oled>OLED</a><ul><li><a href=#magic-fix>Magic fix</a></li><li><a href=#example-code>Example code</a></li></ul></li><li><a href=#backlight-rgb>Backlight RGB:</a><ul><li><a href=#rgb-driver-using-pwm>RGB driver using PWM</a></li><li><a href=#rgb-driver-spi>RGB driver SPI</a></li></ul></li></ul><ul><li><a href=#mcu>MCU</a></li><li><a href=#reset-button-circuit>Reset button circuit</a></li><li><a href=#fuse>Fuse</a></li><li><a href=#schottky-diode>Schottky Diode</a></li><li><a href=#resistors-and-capacitors>Resistors and capacitors</a></li></ul></nav></div></div><h1 id=feature-highlights>Feature highlights</h1><p>Initially, I wanted to build a split board. However, since I already have a
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#dma-channels-for-peripherals>DMA channels for peripherals</a><ul><li><a href=#f072-dma-details>F072 DMA details</a></li><li><a href=#f411-dma-details>F411 DMA details</a></li></ul></li><li><a href=#audio-driver>Audio Driver</a><ul><li><a href=#audio-with-dac>Audio with DAC</a></li><li><a href=#audio-with-pwm>Audio with PWM</a></li></ul></li><li><a href=#oled>OLED</a><ul><li><a href=#magic-fix>Magic fix</a></li><li><a href=#example-code>Example code</a></li></ul></li><li><a href=#backlight-rgb>Backlight RGB:</a><ul><li><a href=#rgb-driver-using-pwm>RGB driver using PWM</a></li><li><a href=#rgb-driver-spi>RGB driver SPI</a></li></ul></li></ul><ul><li><a href=#mcu>MCU</a></li><li><a href=#reset-button-circuit>Reset button circuit</a></li><li><a href=#fuse>Fuse</a></li><li><a href=#schottky-diode>Schottky Diode</a></li><li><a href=#resistors-and-capacitors>Resistors and capacitors</a></li></ul></nav></div></div><h1 id=feature-highlights>Feature highlights</h1><p>Initially, I wanted to build a split board. However, since I already have a
 split (crkbd), making a Arteus/Reviuge-like board makes more sense.</p><p>The design is using aggressive stagger (same column stagger like my split
-design), and 15 degree angle of columns.</p><p>Other features:</p><ul><li>OLED status display</li><li>RGB underglow</li><li>Audio</li><li>Encoder</li></ul><h1 id=design-considerations-for-stm32>Design considerations for STM32</h1><h2 id=dma-channels-for-peripherals>DMA channels for peripherals</h2><p>Peripherals like I2C, SPI and ADC, DAC would use DMA channels. STM32F072 has
-7 DMA channels(details can be found in reference doc). PWM(timers) can also use
-DMA, for example, the WS2812 LED PWM driver uses DMA. When choosing
-peripherals, we need to choose carefully so that DMA channels won&rsquo;t collide.</p><ul><li>I2C1: uses DMA channels 6/7(or 2/3). (Requires <a href=#oled rel>magic boot code</a>
-to configure.)</li><li>DAC1/2: uses DMA channels 3 and 4.</li><li>SPI1: channels 2/3.</li><li>SPI2: channels 4/5 or 6/7.</li></ul><p>QMK uses DMA for the following:</p><ul><li>WS2812 LED: pwm driver uses DMA+PWM.</li><li>Audio: DAC driver uses DMA. PWM driver doesn&rsquo;t use DMA.</li><li>OLED: Uses I2C which uses DMA channels.</li></ul><p>Summary of DMA usage in my design:</p><table><thead><tr><th>Feature</th><th>QMK Driver</th><th>Pins</th><th>Peripheral</th><th>DMA channels</th></tr></thead><tbody><tr><td>OLED</td><td>I2C</td><td>PB6/7</td><td>I2C1</td><td>6/7</td></tr><tr><td>RGB LED</td><td>PWM</td><td>PA8</td><td>TIM1_CH1</td><td>2</td></tr><tr><td>Audio</td><td>PWM</td><td>PA1</td><td>TIM2_CH2</td><td>N/A</td></tr></tbody></table><h2 id=audio-driver>Audio Driver</h2><p>Two options: DAC and PWM. DAC would occupy one or two DMA channels. PWM doesn&rsquo;t
+design), and 15 degree angle of columns.</p><p>Other features:</p><ul><li>OLED status display</li><li>RGB underglow</li><li>Audio</li><li>Encoder</li></ul><h1 id=design-considerations-for-stm32>Design considerations for STM32</h1><p>I&rsquo;ll be using F411 due to lack of F072 stock.</p><p>Tips for setup a stm chip in qmk: <a href=https://discord.com/channels/440868230475677696/440870965728116754/839978277489082370>https://discord.com/channels/440868230475677696/440870965728116754/839978277489082370</a></p><p>Snippet to find keyboards that uses a certain chip:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback> % git grep &#39;MCU\s*=\s*STM32F411&#39; keyboards/
+ keyboards/handwired/onekey/blackpill_f411/rules.mk:MCU = STM32F411
+ keyboards/handwired/onekey/blackpill_f411_tinyuf2/rules.mk:MCU = STM32F411
+ keyboards/handwired/pill60/blackpill_f411/rules.mk:MCU = STM32F411
+ keyboards/handwired/riblee_f411/rules.mk:MCU = STM32F411
+ keyboards/matrix/m20add/rules.mk:MCU = STM32F411
+ keyboards/matrix/noah/rules.mk:MCU = STM32F411
+ keyboards/tkw/grandiceps/rules.mk:MCU = STM32F411
+ keyboards/tkw/stoutgat/v2/f411/rules.mk:MCU = STM32F411
+ keyboards/zvecr/zv48/f411/rules.mk:MCU = STM32F411
+</code></pre></td></tr></table></div></div><h2 id=dma-channels-for-peripherals>DMA channels for peripherals</h2><p>Peripherals like I2C, SPI and ADC, DAC uses DMA channels. PWM also can use DMA
+for better performance, for example, for LED dreivers. STM32F072 has
+7 DMA channels(details can be found in reference doc). When choosing
+peripherals, we need to choose carefully so that DMA channels won&rsquo;t collide.</p><p>QMK uses DMA for the following:</p><ul><li>WS2812 LED: pwm driver uses DMA+PWM.</li><li>Audio: DAC driver uses DMA. PWM driver doesn&rsquo;t use DMA.</li><li>OLED: Uses I2C which uses DMA channels.</li></ul><h3 id=f072-dma-details>F072 DMA details</h3><p>F072 only has one DMA controller(<code>DMA1</code>), which has 1 channel, with 7 streams.</p><ul><li>I2C1: uses DMA streams 6/7(or 2/3). (Requires <a href=#oled rel>magic boot code</a>
+to configure.)</li><li>DAC1/2: uses DMA streams 3 and 4.</li><li>SPI1: streams 2/3.</li><li>SPI2: streams 4/5 or 6/7.</li><li>TIM3_CH1: stream 4</li><li>TIM1_CH1: stream 2</li></ul><h3 id=f411-dma-details>F411 DMA details</h3><p>F411 has 2 DMA controllers, each has 8 channels and each channel with 8 streams.</p><p>Summary of DMA usage in my design:</p><table><thead><tr><th>Feature</th><th>QMK Driver</th><th>Pins</th><th>Peripheral</th><th>DMA channels</th></tr></thead><tbody><tr><td>OLED</td><td>I2C</td><td>PB6/7</td><td>I2C1</td><td>DMA1-Chan1-Stream5/6</td></tr><tr><td>Audio</td><td>PWM</td><td>PA8</td><td>TIM1_CH1 + TIM6 GPT</td><td>N/A</td></tr><tr><td>RGB LED</td><td>PWM</td><td>PB1</td><td>TIM3_CH4</td><td>DMA1-Chan5-Stream2</td></tr><tr><td>RGB (alt)</td><td>SPI1</td><td>PB5</td><td>SPI1</td><td>DMA2-Chan3-Stream2/3</td></tr></tbody></table><h2 id=audio-driver>Audio Driver</h2><p>Two options: DAC and PWM. DAC would occupy one or two DMA channels. PWM doesn&rsquo;t
 use DMA.</p><h3 id=audio-with-dac>Audio with DAC</h3><p>Using two pins can provides higher voltage amplitude and louder volume.</p><ul><li>Pins(A4/A5). <a href="https://docs.qmk.fm/#/audio_driver?id=arm" target=_blank rel="noopener noreffer">ref</a>,
 <a href="https://docs.qmk.fm/#/feature_audio?id=arm-based-boards" target=_blank rel="noopener noreffer">ref2</a></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -31,7 +53,7 @@ use DMA.</p><h3 id=audio-with-dac>Audio with DAC</h3><p>Using two pins can provi
 #ifndef STARTUP_SONG
 #    define STARTUP_SONG SONG(STARTUP_SOUND)
 #endif  // STARTUP_SONG
-</code></pre></td></tr></table></div></div><h3 id=audio-with-pwm>Audio with PWM</h3><ul><li>Use any timer&rsquo;s PWM to output square wave. This only support single pin mode.</li></ul><p>We use <code>TIM2_CH2</code> as example. (use tim3 for audio state timer)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><h3 id=audio-with-pwm>Audio with PWM</h3><ul><li>Use any timer&rsquo;s PWM to output square wave. This only support single pin mode.</li></ul><p>We use <code>TIM3_CH1</code> as example. (use tim6 for audio state timer)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -59,18 +81,18 @@ use DMA.</p><h3 id=audio-with-dac>Audio with DAC</h3><p>Using two pins can provi
 
 // mcuconf.h:
 #include_next &lt;mcuconf.h&gt;
-#undef STM32_PWM_USE_TIM2
-#define STM32_PWM_USE_TIM2                  TRUE
-#undef STM32_GPT_USE_TIM3
-#define STM32_GPT_USE_TIM3                  TRUE
+#undef STM32_PWM_USE_TIM1
+#define STM32_PWM_USE_TIM1                  TRUE
+#undef STM32_GPT_USE_TIM6
+#define STM32_GPT_USE_TIM6                  TRUE
 
 //config.h:
-#define AUDIO_PIN A1
-// AF2 on pin PA1 is TIM2_CH2
-#define AUDIO_PWM_PAL_MODE 2
-#define AUDIO_PWM_DRIVER PWMD2
-#define AUDIO_PWM_CHANNEL 2
-#define AUDIO_STATE_TIMER GPTD3
+// Use pin C6(TIM3_CH1) PWM
+#define AUDIO_PIN A8
+#define AUDIO_PWM_PAL_MODE 1
+#define AUDIO_PWM_DRIVER PWMD1
+#define AUDIO_PWM_CHANNEL 1
+#define AUDIO_STATE_TIMER GPTD6
 </code></pre></td></tr></table></div></div><h2 id=oled>OLED</h2><p>I2C: Use I2C1(pins B6/7). <a href="https://docs.qmk.fm/#/i2c_driver?id=arm-configuration" target=_blank rel="noopener noreffer">ref</a></p><h3 id=magic-fix>Magic fix</h3><p>For F072, extra configuration is needed to use I2C1 correctly. For details, see
 <a href=https://discord.com/channels/440868230475677696/440868230475677698/837318487759388682 target=_blank rel="noopener noreffer">discord</a>,
 <a href=https://discord.com/channels/440868230475677696/440868230475677698/837292700051046400 target=_blank rel="noopener noreffer">discord2</a></p><h3 id=example-code>Example code</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
@@ -119,8 +141,8 @@ void board_init(void) {
 
 //The SYSCFG_CFGR1_SPI2_DMA_RMP clearing part might not actually be needed (the power-on state for this bit should be 0), but you can include it just to be sure.
 
-</code></pre></td></tr></table></div></div><h2 id=backlight-rgb>Backlight RGB:</h2><ul><li>LED: use <a href=https://lcsc.com/product-detail/Light-Emitting-Diodes-LED_5050-RGBIntegrated-Light_C114584.html target=_blank rel="noopener noreffer">WS2812S</a></li></ul><h3 id=rgb-driver-using-pwm>RGB driver using PWM</h3><p>Uses PWM and DMA. Here I&rsquo;m using <code>TIM1_CH1</code> on pin <code>A8</code> as output, and connect
-it with pull up resistor to 5V. (<code>A8</code> is a 5v tolerant pin)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><h2 id=backlight-rgb>Backlight RGB:</h2><ul><li>LED: use <a href=https://lcsc.com/product-detail/Light-Emitting-Diodes-LED_5050-RGBIntegrated-Light_C114584.html target=_blank rel="noopener noreffer">WS2812S</a></li></ul><h3 id=rgb-driver-using-pwm>RGB driver using PWM</h3><p>Uses PWM and DMA. Here I&rsquo;m using <code>TIM3_CH4</code> on pin <code>B1</code> as output, and connect
+it with pull up resistor to 5V. (<code>B1</code> is a 5v tolerant pin)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -134,27 +156,21 @@ it with pull up resistor to 5V. (<code>A8</code> is a 5v tolerant pin)</p><div c
 </span><span class=lnt>12
 </span><span class=lnt>13
 </span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>// rules.mk
 RGBLIGHT_DRIVER = WS2812
 // config.h 
-#define RGB_DI_PIN A8
-#define WS2812_PWM_DRIVER PWMD1
-#define WS2812_PWM_CHANNEL 1
+#define RGB_DI_PIN B1
+#define WS2812_PWM_DRIVER PWMD3
+#define WS2812_PWM_CHANNEL 4
 #define WS2812_EXTERNAL_PULLUP
-// Set A8 to TIM1_CH1
+// Set B1 to tim3 ch4
 #define WS2812_PWM_PAL_MODE 2
-// &#34;Stream&#34; here means the &#34;channel x&#34; of the dma controller in datasheet.
-// TIM1_CH1 uses dma channel 2. There&#39;s also a note in the reference:
 // DMA request mapped on this DMA channel only if the corresponding remapping 
 // bit is cleared in the SYSCFG_CFGR1 register. For more details, please refer 
 // to Section 9.1.1: SYSCFG configuration register 1 (SYSCFG_CFGR1) on page165.
 #define WS2812_DMA_STREAM STM32_DMA1_STREAM2
-// &#34;Channel&#34; here means the dma controller (DMA1/DMA2)
-// DMA_CHANNEL shoule be left undefined, since F072 has only one DMA controller.
-</code></pre></td></tr></table></div></div><p>If using pin B15(tim15)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+#define WS2812_DMA_CHANNEL 5
+</code></pre></td></tr></table></div></div><p>If using pin B15(tim15) (F072)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -196,11 +212,14 @@ This requires other spi pins unused.(miso and sck, e.g. B13 and B14)</p><div cla
 #define WS2812_SPI_SCK_PAL_MODE 0
 </code></pre></td></tr></table></div></div><p>Note: Extra setup is needed for F072 <code>B15</code> pin. <a href=https://discord.com/channels/440868230475677696/440868230475677698/838685140661436417 target=_blank rel="noopener noreffer">details</a></p><p>The fix is to define <code>#define WS2812_SPI_USE_CIRCULAR_BUFFER</code>. The flag is only
 available in <code>develop</code> branch. Anoth</p><h1 id=component-choices>Component choices</h1><p>Use this <a href=https://yaqwsx.github.io/jlcparts/#/ target=_blank rel="noopener noreffer">site</a> to search JLCPCB parts
-for SMD assembly service availability and price.</p><p>Summary:</p><table><thead><tr><th>Component</th><th>Model</th><th>JLCPCB PN</th><th>Count</th><th>Notes</th></tr></thead><tbody><tr><td>MCU</td><td>STM32F072CBU6</td><td>C92504</td><td>1</td><td></td></tr><tr><td>Regulator</td><td>XC6206P332MR</td><td>C5446</td><td>1</td><td>3.3V fixed output</td></tr><tr><td>BJT</td><td>MMBT3904</td><td>C20526</td><td>1</td><td>for reset circuit, need add resistors</td></tr><tr><td>diode</td><td>1N4148</td><td>C81598</td><td>for both switches and reset button.</td><td></td></tr><tr><td>Fuse</td><td>JK-MSMD050</td><td>C369167</td><td>For USB bus voltage protection</td><td></td></tr><tr><td>Schottky Diode</td><td>SS14</td><td>C2480</td><td>between voltage regulartor</td><td></td></tr><tr><td>Buzzer</td><td>KLJ-1625</td><td>C201041</td><td>smd pizeo buzzer</td><td></td></tr></tbody></table><h2 id=mcu>MCU</h2><p>I&rsquo;m using STM32F072CB, which is more powerful than the atmega on pro micros.
+for SMD assembly service availability and price.</p><p>Summary:</p><table><thead><tr><th>Component</th><th>Model</th><th>JLCPCB PN</th><th>Count</th><th>Notes</th></tr></thead><tbody><tr><td>MCU</td><td>STM32F072CBU6</td><td>C92504</td><td>1</td><td></td></tr><tr><td>Regulator</td><td>XC6206P332MR</td><td>C5446</td><td>1</td><td>3.3V fixed output</td></tr><tr><td>BJT</td><td>MMBT3904</td><td>C20526</td><td>1</td><td>for reset circuit, need add resistors</td></tr><tr><td>diode</td><td>1N4148</td><td>C81598</td><td>for both switches and reset button.</td><td></td></tr><tr><td>Fuse</td><td>JK-MSMD050</td><td>C369167</td><td>For USB bus voltage protection</td><td></td></tr><tr><td>Schottky Diode</td><td>SS14</td><td>C2480</td><td>between voltage regulartor</td><td></td></tr><tr><td>Buzzer</td><td>KLJ-1625</td><td>C201041</td><td>smd pizeo buzzer</td><td></td></tr></tbody></table><h2 id=mcu>MCU</h2><p>I&rsquo;m using STM32 MCU, which is more powerful than the atmega on pro micros.
 The atmega32u4 is 8 bit processor and only has 32K memory size. In comparison,
 the Arm chips are 32bit, and has more program memory(F072C8 has 64K, F072CB has
-128K). The same chip is used in other custom keyboard designs like Ferris.</p><p>The model I&rsquo;m using is STM32F072CBU6, which is the only one in stock in JLCPCB.
-The chip seems to be out of stock everywhere at this moment.</p><h2 id=reset-button-circuit>Reset button circuit</h2><p>To reset(and enter bootloader), we need to trigger both NRST and BOOT0 pins.
+128K, F411 has 256K/521K flash and 128K SRAM).</p><p>Initially I wanted to use STM32F072CBU6, which is also used in Ferris. However,
+it became OOS and I had to pick another chip. I found STM32F411 whixh id more
+powerful.</p><p>One caveat is that F4 series doesn&rsquo;t have built-in eeprom emulator. An
+external eeprom chip is needed, otherwise some features are not usable, like
+bootmagic, on-board settings(default layers, for example).</p><h2 id=reset-button-circuit>Reset button circuit</h2><p>To reset(and enter bootloader), we need to trigger both NRST and BOOT0 pins.
 This <a href=http://acheronproject.com/reset_article/principle.html#conclusion target=_blank rel="noopener noreffer">guide</a>
 suggested 3 variants and I&rsquo;m using the middle one for simplicity. For this
 circuit, we need a transistor. I&rsquo;m not using the prebiased one shown there
