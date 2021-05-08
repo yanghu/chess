@@ -21,31 +21,65 @@ Other features:
 
 # Design considerations for STM32
 
+I'll be using F411 due to lack of F072 stock. 
+
+Tips for setup a stm chip in qmk: https://discord.com/channels/440868230475677696/440870965728116754/839978277489082370
+
+Snippet to find keyboards that uses a certain chip:
+
+```
+ % git grep 'MCU\s*=\s*STM32F411' keyboards/
+ keyboards/handwired/onekey/blackpill_f411/rules.mk:MCU = STM32F411
+ keyboards/handwired/onekey/blackpill_f411_tinyuf2/rules.mk:MCU = STM32F411
+ keyboards/handwired/pill60/blackpill_f411/rules.mk:MCU = STM32F411
+ keyboards/handwired/riblee_f411/rules.mk:MCU = STM32F411
+ keyboards/matrix/m20add/rules.mk:MCU = STM32F411
+ keyboards/matrix/noah/rules.mk:MCU = STM32F411
+ keyboards/tkw/grandiceps/rules.mk:MCU = STM32F411
+ keyboards/tkw/stoutgat/v2/f411/rules.mk:MCU = STM32F411
+ keyboards/zvecr/zv48/f411/rules.mk:MCU = STM32F411
+```
+
 ## DMA channels for peripherals
 
-Peripherals like I2C, SPI and ADC, DAC would use DMA channels. STM32F072 has
-7 DMA channels(details can be found in reference doc). PWM(timers) can also use
-DMA, for example, the WS2812 LED PWM driver uses DMA. When choosing 
+
+Peripherals like I2C, SPI and ADC, DAC uses DMA channels. PWM also can use DMA
+for better performance, for example, for LED dreivers. STM32F072 has
+7 DMA channels(details can be found in reference doc). When choosing 
 peripherals, we need to choose carefully so that DMA channels won't collide.
 
-- I2C1: uses DMA channels 6/7(or 2/3). (Requires [magic boot code](#oled) 
-to configure.)
-- DAC1/2: uses DMA channels 3 and 4.
-- SPI1: channels 2/3.
-- SPI2: channels 4/5 or 6/7.
 
 QMK uses DMA for the following:
 - WS2812 LED: pwm driver uses DMA+PWM.
 - Audio: DAC driver uses DMA. PWM driver doesn't use DMA.
 - OLED: Uses I2C which uses DMA channels.
 
+### F072 DMA details
+
+F072 only has one DMA controller(`DMA1`), which has 1 channel, with 7 streams.
+
+- I2C1: uses DMA streams 6/7(or 2/3). (Requires [magic boot code](#oled) 
+to configure.)
+- DAC1/2: uses DMA streams 3 and 4.
+- SPI1: streams 2/3.
+- SPI2: streams 4/5 or 6/7.
+- TIM3_CH1: stream 4
+- TIM1_CH1: stream 2
+
+### F411 DMA details
+
+F411 has 2 DMA controllers, each has 8 channels and each channel with 8 streams.
+
 Summary of DMA usage in my design:
 
-| Feature  |  QMK Driver | Pins  |  Peripheral |  DMA channels|
-|----------|-------------|-------|-------------|--------------|
-| OLED     |   I2C       |PB6/7  |  I2C1       |  6/7         |
-| RGB LED  |  PWM        | PA8   | TIM1_CH1    |  2           |
-| Audio    |  PWM        | PA1   | TIM2_CH2    |  N/A         |
+|-----------|------------|-------|---------------------|----------------------|
+| Feature   | QMK Driver | Pins  | Peripheral          | DMA channels         |
+|-----------|------------|-------|---------------------|----------------------|
+| OLED      | I2C        | PB6/7 | I2C1                | DMA1-Chan1-Stream5/6 |
+| Audio     | PWM        | PA8   | TIM1\_CH1 + TIM6 GPT | N/A                  |
+| RGB LED   | PWM        | PB1   | TIM3\_CH4            | DMA1-Chan5-Stream2   |
+| RGB (alt) | SPI1       | PB5   | SPI1                | DMA2-Chan3-Stream2/3 |
+|-----------|------------|-------|---------------------|----------------------|
 
 ## Audio Driver
 
@@ -73,7 +107,7 @@ Using two pins can provides higher voltage amplitude and louder volume.
 
 * Use any timer's PWM to output square wave. This only support single pin mode.
 
-We use `TIM2_CH2` as example. (use tim3 for audio state timer)
+We use `TIM3_CH1` as example. (use tim6 for audio state timer)
 
 ```
 //halconf.h:
@@ -84,23 +118,25 @@ We use `TIM2_CH2` as example. (use tim3 for audio state timer)
 
 // mcuconf.h:
 #include_next <mcuconf.h>
-#undef STM32_PWM_USE_TIM2
-#define STM32_PWM_USE_TIM2                  TRUE
-#undef STM32_GPT_USE_TIM3
-#define STM32_GPT_USE_TIM3                  TRUE
+#undef STM32_PWM_USE_TIM1
+#define STM32_PWM_USE_TIM1                  TRUE
+#undef STM32_GPT_USE_TIM6
+#define STM32_GPT_USE_TIM6                  TRUE
 
 //config.h:
-#define AUDIO_PIN A1
-// AF2 on pin PA1 is TIM2_CH2
-#define AUDIO_PWM_PAL_MODE 2
-#define AUDIO_PWM_DRIVER PWMD2
-#define AUDIO_PWM_CHANNEL 2
-#define AUDIO_STATE_TIMER GPTD3
+// Use pin C6(TIM3_CH1) PWM
+#define AUDIO_PIN A8
+#define AUDIO_PWM_PAL_MODE 1
+#define AUDIO_PWM_DRIVER PWMD1
+#define AUDIO_PWM_CHANNEL 1
+#define AUDIO_STATE_TIMER GPTD6
 ```
 
 ## OLED
 
 I2C: Use I2C1(pins B6/7). [ref](https://docs.qmk.fm/#/i2c_driver?id=arm-configuration)
+
+Note that, pull up resistors(4.7kOhm) are needed for I2C pins.
 
 ### Magic fix
 
@@ -141,30 +177,27 @@ void board_init(void) {
 * LED: use [WS2812S](https://lcsc.com/product-detail/Light-Emitting-Diodes-LED_5050-RGBIntegrated-Light_C114584.html)
 
 ### RGB driver using PWM
-Uses PWM and DMA. Here I'm using `TIM1_CH1` on pin `A8` as output, and connect
-it with pull up resistor to 5V. (`A8` is a 5v tolerant pin)
+Uses PWM and DMA. Here I'm using `TIM3_CH4` on pin `B1` as output, and connect
+it with pull up resistor to 5V. (`B1` is a 5v tolerant pin)
 
 ```
 // rules.mk
 RGBLIGHT_DRIVER = WS2812
 // config.h 
-#define RGB_DI_PIN A8
-#define WS2812_PWM_DRIVER PWMD1
-#define WS2812_PWM_CHANNEL 1
+#define RGB_DI_PIN B1
+#define WS2812_PWM_DRIVER PWMD3
+#define WS2812_PWM_CHANNEL 4
 #define WS2812_EXTERNAL_PULLUP
-// Set A8 to TIM1_CH1
+// Set B1 to tim3 ch4
 #define WS2812_PWM_PAL_MODE 2
-// "Stream" here means the "channel x" of the dma controller in datasheet.
-// TIM1_CH1 uses dma channel 2. There's also a note in the reference:
 // DMA request mapped on this DMA channel only if the corresponding remapping 
 // bit is cleared in the SYSCFG_CFGR1 register. For more details, please refer 
 // to Section 9.1.1: SYSCFG configuration register 1 (SYSCFG_CFGR1) on page165.
 #define WS2812_DMA_STREAM STM32_DMA1_STREAM2
-// "Channel" here means the dma controller (DMA1/DMA2)
-// DMA_CHANNEL shoule be left undefined, since F072 has only one DMA controller.
+#define WS2812_DMA_CHANNEL 5
 ```
 
-If using pin B15(tim15)
+If using pin B15(tim15) (F072)
 
 ```
 // rules.mk
@@ -202,7 +235,6 @@ The fix is to define `#define WS2812_SPI_USE_CIRCULAR_BUFFER`. The flag is only
 available in `develop` branch. Anoth 
 
 
-
 # Component choices
 
 Use this [site](https://yaqwsx.github.io/jlcparts/#/) to search JLCPCB parts
@@ -210,26 +242,32 @@ for SMD assembly service availability and price.
 
 Summary:
 
-| Component  |  Model   | JLCPCB PN |Count|Notes | 
-|------------|----------|-----------|-----|------|
-| MCU        |STM32F072CBU6| C92504 |1   |
-| Regulator  |XC6206P332MR| C5446   | 1  | 3.3V fixed output|
-| BJT        |MMBT3904    | C20526  | 1  | for reset circuit, need add resistors|
-| diode      | 1N4148     |C81598  | for both switches and reset button.|
-| Fuse       |JK-MSMD050    | C369167 | For USB bus voltage protection|
-| Schottky Diode| SS14    | C2480  | between voltage regulartor|
-| Buzzer    | KLJ-1625    | C201041| smd pizeo buzzer |
-
+|----------------|---------------|-----------|-------------------------------------|---------------------------------------|
+| Component      | Model         | JLCPCB PN | Count                               | Notes                                 |
+|----------------|---------------|-----------|-------------------------------------|---------------------------------------|
+| MCU            | STM32F072CBU6 | C92504    | 1                                   |
+| Regulator      | XC6206P332MR  | C5446     | 1                                   | 3.3V fixed output                     |
+| BJT            | MMBT3904      | C20526    | 1                                   | for reset circuit, need add resistors |
+| diode          | 1N4148        | C81598    | for both switches and reset button. |
+| Fuse           | JK-MSMD050    | C369167   | For USB bus voltage protection      |
+| Schottky Diode | SS14          | C2480     | between voltage regulartor          |
+| Buzzer         | KLJ-1625      | C201041   | smd pizeo buzzer                    |
+|----------------|---------------|-----------|-------------------------------------|
 
 ## MCU
 
-I'm using STM32F072CB, which is more powerful than the atmega on pro micros.
+I'm using STM32 MCU, which is more powerful than the atmega on pro micros.
 The atmega32u4 is 8 bit processor and only has 32K memory size. In comparison,
 the Arm chips are 32bit, and has more program memory(F072C8 has 64K, F072CB has
-128K). The same chip is used in other custom keyboard designs like Ferris.
+128K, F411 has 256K/521K flash and 128K SRAM).
 
-The model I'm using is STM32F072CBU6, which is the only one in stock in JLCPCB.
-The chip seems to be out of stock everywhere at this moment.
+Initially I wanted to use STM32F072CBU6, which is also used in Ferris. However,
+it became OOS and I had to pick another chip. I found STM32F411 whixh id more 
+powerful.
+
+One caveat is that F4 series doesn't have built-in eeprom emulator. An
+external eeprom chip is needed, otherwise some features are not usable, like 
+bootmagic, on-board settings(default layers, for example).
 
 ## Reset button circuit
 
@@ -257,4 +295,10 @@ part in JLCPCB. It is "40V 1A 550mV @ 1A" which is pretty close.
 
 I'm using all 0603 footprint.
 
+# TODO
+
+Some changes to apply to next design:
+
+* Add 4.7k pull up to i2c pins.
+* Use 8Mhz crystal instead of 25MHz. [ref](https://discord.com/channels/440868230475677696/440870965728116754/840697199058485248)
 
