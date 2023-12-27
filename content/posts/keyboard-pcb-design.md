@@ -63,8 +63,8 @@ to configure.)
 - DAC1/2: uses DMA streams 3 and 4.
 - SPI1: streams 2/3.
 - SPI2: streams 4/5 or 6/7.
-- TIM3_CH1: stream 4
-- TIM1_CH1: stream 2
+- TIM3\_CH1: stream 4
+- TIM1\_CH1: stream 2
 
 ### F411 DMA details
 
